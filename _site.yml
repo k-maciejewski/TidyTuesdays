@@ -1,0 +1,13 @@
+name: Tidy Tuesdays!
+output_dir: .
+navbar:
+  title: Home
+  right:
+  - icon: fa-github fa-lg
+    href: https://github.com/k-maciejewski/p8105_final_website
+output:
+  html_document:
+    lib_dir: site_libs
+    self_contained: no
+    theme: cosmo
+

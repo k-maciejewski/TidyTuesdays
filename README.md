@@ -1,13 +1,4 @@
-# My contributions to TidyTuesday
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = F)
-library(flexdashboard)
-library(tidyverse)
-library(maps)
-library(plotly)
-library(viridis)
-```
+# My contributions to TidyTuesdays
 
 ## Horror movies, 2019 week 43
 
@@ -46,4 +37,12 @@ g2[order(-g2$average),] %>% knitr::kable()
 
 ### Horror movie filming location in each country from 2012 to 2017
 
-![Map1](/TT_2019_w43-2-1.png)
+![](2019w43/TT_2019_w43-2-1.png)
+
+### Horror movies released by country from 2012 to 2017
+
+![](2019w43/TT_2019_w43-3-1.png)
+
+### Horror movie ratings by country from 2012 to 2017
+
+![](2019w43/TT_2019_w43-4-1.png)

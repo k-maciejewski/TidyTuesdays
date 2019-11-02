@@ -2,6 +2,10 @@
 title: "Tidy Tuesday 2019 week 43: Oh the horror"
 output: 
   flexdashboard::flex_dashboard:
+    navbar:
+      - { icon: fa-github-square,
+       href: "https://github.com/k-maciejewski/TidyTuesdays/",
+        align: right }
     orientation: columns
     vertical_layout: scroll
     source_code: embed

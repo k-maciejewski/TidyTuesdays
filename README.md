@@ -1,6 +1,6 @@
 # My contributions to TidyTuesdays
 
-## Horror movies, 2019 week 43
+## [Horror movies, 2019 week 43](http://rpubs.com/k-maciejewski/545898)
 
 ```{r load_data}
 horror_movies <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-10-22/horror_movies.csv")

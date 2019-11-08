@@ -1,0 +1,10 @@
+name: Publish Document
+title:
+username:
+account: rpubs
+server: rpubs.com
+hostUrl: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/547777/4bdacb01749f4157b775347af15062dc
+bundleId: https://api.rpubs.com/api/v1/document/547777/4bdacb01749f4157b775347af15062dc
+url: http://rpubs.com/k-maciejewski/547777
+when: 1573178926.33158

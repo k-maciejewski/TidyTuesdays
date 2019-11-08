@@ -2,47 +2,38 @@
 
 ## [Horror movies, 2019 week 43](http://rpubs.com/k-maciejewski/545898)
 
-```{r load_data}
-horror_movies <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-10-22/horror_movies.csv")
-```
-
-```{r data_manipulation}
-horror <- horror_movies %>% mutate(id = row_number()) %>% 
-  separate_rows(genres, sep = "\\| ") %>% 
-  mutate(y = 1) %>%
-  spread(genres, y, fill = 0)
-horror$filming_country <- gsub(".*, ", "", horror$filming_locations)
-worldmap <- map_data("world") %>% tbl_df %>% filter(region !="Antarctica")
-```
+Link to R-Pub above, see folder for code and more.
 
 For my first tidy Tuesday, I explored the [dataset of horror movies](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-10-22). I'm not a huge horror fan, but when I saw location data, I knew what I would do: practice my mapping! Even though I didn't use it, changing the strings of genres to indicator functions was also good practice.
 
-```{r}
-g_film <- horror %>%
-  group_by(filming_country) %>%
-  summarise(total = n()) %>% 
-  top_n(., 5) 
-g_film[order(-g_film$total),] %>% knitr::kable()
-g1 <- horror %>%
-  group_by(release_country) %>%
-  summarise(total = n()) %>% 
-  top_n(., 5) 
-g1[order(-g1$total),] %>% knitr::kable()
-g2<-horror %>%
-  group_by(release_country) %>%
-  summarise(average = mean(review_rating, na.rm = T)) %>% 
-  top_n(., 5)
-g2[order(-g2$average),] %>% knitr::kable()
-```
-
 ### Horror movie filming location in each country from 2012 to 2017
 
-![](2019w43/TT_2019_w43-2-1.png)
+![](2019w43/TT_2019_w43-2-1.png){width=70%}
 
 ### Horror movies released by country from 2012 to 2017
 
-![](2019w43/TT_2019_w43-3-1.png)
+![](2019w43/TT_2019_w43-3-1.png){width=70%}
 
 ### Horror movie ratings by country from 2012 to 2017
 
-![](2019w43/TT_2019_w43-4-1.png)
+![](2019w43/TT_2019_w43-4-1.png){width=70%}
+
+## [SQUIRREL!! 2019 week 44](http://rpubs.com/k-maciejewski/547777)
+
+Link to R-Pub above, see folder for code and more.
+
+This tidy tuesday explores the [squirrel census!](https://www.thesquirrelcensus.com) Obviously, the data needed to be mapped, so I took the opportunity to try to learn a little [Leaflet.](https://leafletjs.com)
+
+The first map shows all squirrels with given distance above ground at which they were sighted. NA's were filtered out. According to [the data dictionary](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-10-29#data-dictionary), fields were populated with a value of “FALSE” if the squirrel was on the ground plane so these values were changed to zeros. This map is mostly filled with dark blue, the color of ground-dwelling squirrels.
+
+### All squirrels
+
+![](2019w44/Map1.png){width=70%}
+
+### Heights below 50, and above ground level
+
+![](2019w44/Map2.png){width=70%}
+
+### Heights above 50 
+
+![](2019w44/Map3.png){width=70%}

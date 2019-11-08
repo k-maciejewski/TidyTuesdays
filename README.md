@@ -16,7 +16,11 @@ For my first tidy Tuesday, I explored the [dataset of horror movies](https://git
 
 ### Horror movie ratings by country from 2012 to 2017
 
+<<<<<<< HEAD
+![](2019w43/TT_2019_w43-4-1.png)
+=======
 ![](2019w43/TT_2019_w43-4-1.png){width=70%}
+>>>>>>> 82e2ab88a30ada6280cadf6051372f23d1157e2f
 
 ## [SQUIRREL!! 2019 week 44](http://rpubs.com/k-maciejewski/547777)
 
@@ -28,6 +32,17 @@ The first map shows all squirrels with given distance above ground at which they
 
 ### All squirrels
 
+<<<<<<< HEAD
+![](2019w44/Map1.png)
+
+### Heights below 50, and above ground level
+
+![](2019w44/Map2.png)
+
+### Heights above 50 
+
+![](2019w44/Map3.png)
+=======
 ![](2019w44/Map1.png){width=70%}
 
 ### Heights below 50, and above ground level
@@ -37,3 +52,4 @@ The first map shows all squirrels with given distance above ground at which they
 ### Heights above 50 
 
 ![](2019w44/Map3.png){width=70%}
+>>>>>>> 82e2ab88a30ada6280cadf6051372f23d1157e2f

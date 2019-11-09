@@ -12,7 +12,7 @@ For my first tidy Tuesday, I explored the [dataset of horror movies](https://git
 
 ### Horror movies released by country from 2012 to 2017
 
-![](2019w43/TT_2019_w43-3-1.png){width=70%}
+![](2019w43/TT_2019_w43-3-1.png)
 
 ### Horror movie ratings by country from 2012 to 2017
 

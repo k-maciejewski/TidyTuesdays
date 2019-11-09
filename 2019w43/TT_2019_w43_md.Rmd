@@ -4,7 +4,7 @@ output: rmarkdown::github_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = F, cache = T, message = F)
+knitr::opts_chunk$set(echo = F, message = F)
 library(flexdashboard)
 library(tidyverse)
 library(maps)

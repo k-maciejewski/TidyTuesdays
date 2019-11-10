@@ -1,10 +1,11 @@
 ---
 title: "Tidy Tuesday 2019 week 44"
 output:
-  html_document:
-    df_print: paged
-    keep_md: true
-    code_folding: hide
+    rmarkdown::html_document:
+      theme: flatly
+      df_print: paged
+      keep_md: true
+      code_folding: hide
 ---
 
 ```{r setup, include=FALSE}
@@ -15,13 +16,11 @@ htmltools::tagList(rmarkdown::html_dependency_font_awesome())
 ```
 
 
-<P ALIGN=RIGHT> [<i class="fa fa-github" font color="#4F8AC2" style="font-size: 50pt"></i>](https://github.com/k-maciejewski/TidyTuesdays) [<i class="fa fa-address-card" font color="#4F8AC2" style="font-size: 50pt"></i>](https://k-maciejewski.github.io) </P>
-
 ```{r dataload}
 nyc_squirrels <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-10-29/nyc_squirrels.csv")
 ```
 
-This tidy tuesday explores the [squirrel census!](https://www.thesquirrelcensus.com) Obviously, the data needed to be mapped, so I took the opportunity to try to learn a little [Leaflet.](https://leafletjs.com)
+This [Tidy Tuesday](https://github.com/rfordatascience/tidytuesday/blob/master/data/2019/2019-10-29) explores the [squirrel census!](https://www.thesquirrelcensus.com) I took the opportunity to try to learn a little [Leaflet.](https://leafletjs.com)
 
 ```{r}
 # date string to date time
@@ -115,3 +114,9 @@ The final map shows values above 50. There are only a handful of such points.
 `r nyc_squirrels_g50_map`
 
 I couldn't find any information about the units for the measurement, so I'm not sure if the upper range makes any sense...
+
+<hr />
+<P ALIGN=CENTER> [<i class="fa fa-github" font color="#4F8AC2" style="font-size: 20pt"></i>](https://github.com/k-maciejewski/TidyTuesdays) 
+[<i class="fa fa-globe" font color="#4F8AC2" style="font-size: 20pt"></i>](https://k-maciejewski.github.io) </P>
+
+<hr />

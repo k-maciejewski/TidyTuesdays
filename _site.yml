@@ -1,0 +1,20 @@
+name: "Tidy Tuesdays!"
+output_dir: "."
+navbar:
+  title: "Home"
+  right:
+    - text: Files
+      menu:
+        - text: "2019 week 43"
+          href: 2019w43/TT_2019_w43.html
+        - text: "2019 week 44"
+          href: TT_2019_44.html
+        - text: "2019 week 45"
+          href: TT_2019_45.html
+    - icon: fa-github fa-lg
+      href: https://github.com/k-maciejewski/TidyTuesdays/
+output:
+  html_document:
+    theme: cosmo
+    code_folding: hide
+

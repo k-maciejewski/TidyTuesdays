@@ -3,7 +3,10 @@ title: "Tidy Tuesday 2019 week 43: Oh the horror"
 output: 
   flexdashboard::flex_dashboard:
     navbar:
-      - { icon: fa-github-square,
+       - { title: home,
+       href: "https://github.com/k-maciejewski/TidyTuesdays/",
+        align: right}
+       - { icon: fa-github-square,
        href: "https://github.com/k-maciejewski/TidyTuesdays/",
         align: right }
     orientation: columns
@@ -35,10 +38,10 @@ horror$filming_country <- gsub(".*, ", "", horror$filming_locations)
 worldmap <- map_data("world") %>% tbl_df %>% filter(region !="Antarctica")
 ```
 
-column {.sidebar}
+About {.sidebar}
 -------------------------------------
 
-For my first tidy Tuesday, I explored the [dataset of horror movies](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-10-22). I'm not a huge horror fan, but when I saw location data, I knew what I would do: practice my mapping! Even though I didn't use it, changing the strings of genres to indicator functions was also good practice.
+For my first Tidy Tuesday, I explored the [dataset of horror movies](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-10-22) from the IMDB Horror Movie Dataset at [Kaggle](https://www.kaggle.com/PromptCloudHQ/imdb-horror-movie-dataset). I'm not a huge horror fan, but when I saw location data, I knew what I would do: practice my mapping! Even though I didn't use it, changing the strings of genres to indicator functions was also good practice.
 
 ```{r}
 g_film <- horror %>%

@@ -3,8 +3,8 @@ title: "Tidy Tuesday 2019 week 43: Oh the horror"
 output: 
   flexdashboard::flex_dashboard:
     navbar:
-       - { title: home,
-       href: "https://github.com/k-maciejewski/TidyTuesdays/",
+       - { title: Home,
+       href: "https://k-maciejewski.github.io/TidyTuesdays/",
         align: right}
        - { icon: fa-github-square,
        href: "https://github.com/k-maciejewski/TidyTuesdays/",

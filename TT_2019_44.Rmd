@@ -4,6 +4,7 @@ output:
     rmarkdown::html_document:
       df_print: paged
       keep_md: true
+      code_folding: hide
 ---
 
 ```{r setup, include=FALSE}

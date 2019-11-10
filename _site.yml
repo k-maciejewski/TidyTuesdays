@@ -16,5 +16,4 @@ navbar:
 output:
   html_document:
     theme: cosmo
-    code_folding: hide
 

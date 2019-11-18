@@ -2,7 +2,7 @@
 title: "Tidy Tuesday 2019 week 44"
 output:
     rmarkdown::html_document:
-      theme: flatly
+      theme: cosmo
       df_print: paged
       keep_md: true
       code_folding: hide

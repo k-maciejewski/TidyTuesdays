@@ -4,7 +4,6 @@ output:
     rmarkdown::html_document:
       theme: cosmo
       df_print: paged
-      keep_md: true
       code_folding: hide
 ---
 
@@ -31,8 +30,8 @@ commute_mode <- readr::read_csv("https://raw.githubusercontent.com/rfordatascien
 acs_data <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-11-05/table_3.csv")
 
 # previously geocoded. code below, but not run in RMD
-#commute_mode_geo <- readxl::read_excel("2019w45/TT_2019w45_geo.xlsx")
-commute_mode_geo <- readxl::read_excel("TT_2019w45_geo.xlsx")
+commute_mode_geo <- readxl::read_excel("2019w45/TT_2019w45_geo.xlsx")
+# commute_mode_geo <- readxl::read_excel("TT_2019w45_geo.xlsx")
 ```
 
 ```{r cleaning, eval = F}
@@ -240,7 +239,7 @@ US_map_walk <- left_join(state.map, state_walk, by = c("region" = "state")) %>%
   distinct_all()
 ```
 
-Below are box plots of mode of travel by city size and region. There are more walkers, more variation in small cities, and it looks like the northeast may have more walkers than other regions. The Northeast 
+Below are box plots of mode of travel by city size and region. There are more walkers, more variation in small cities, and it looks like the northeast may have more walkers than other regions.
 
 ```{r plots}
 ggplot(data = commute_mode,
@@ -254,7 +253,7 @@ ggplot(data = commute_mode,
   theme(legend.position = "bottom")
 ```
 
-Now I map the data. Each point represents a city in the dataset. The points and states are colored according to the percent of mode of travel, by city or averaged over the whole state. I also piped to plotly so the maps are interactive.
+Finally, I map the data below. Each point represents a city in the dataset. The points and states are colored according to the percent of mode of travel, by city or averaged over the whole state. I also piped to plotly so the maps are interactive.
 
 ```{r maps}
 US_bike <- US_map_bike %>% 
@@ -276,8 +275,8 @@ US_bike <- US_map_bike %>%
 
 US_bike
 
-plotly::ggplotly(US_bike)
-  
+plotly::ggplotly(US_bike + theme(legend.position = "none"))
+
 walk_map <- US_map_walk %>% 
   filter(long<0) %>% 
     ggplot(aes(long, lat, 
@@ -298,7 +297,7 @@ walk_map <- US_map_walk %>%
 
 walk_map
 
-plotly::ggplotly(walk_map)
+plotly::ggplotly(walk_map + theme(legend.position = "none"))
 ```
 
 

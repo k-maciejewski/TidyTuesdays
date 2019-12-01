@@ -4,29 +4,37 @@ output:
     rmarkdown::html_document:
       theme: cosmo
       df_print: paged
-      keep_md: true
       code_folding: hide
 ---
 
-
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+library(tidyverse)
+library(maps)
+library(ggmap)
+library(choroplethrMaps)
+# # for geocoding API
+# library(secret)
+# Sys.setenv(USER_KEY = "~Desktop/Kaitlin/key")
+# try(local_key(), silent = TRUE)
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+```
 
 This week is [Modes Less Traveled - Bicycling and Walking to Work in the United States: 2008-2012](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-11-05) from the  [ACS](https://www.census.gov/library/publications/2014/acs/acs-25.html?#).
 
 The `commute.csv` dataset on Github was tidied from 6 raw excel files. The code and final dataset was already provided.
 
-
-```r
+```{r dataload}
 commute_mode <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-11-05/commute.csv")
 
 acs_data <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-11-05/table_3.csv")
 
 # previously geocoded. code below, but not run in RMD
-#commute_mode_geo <- readxl::read_excel("2019w45/TT_2019w45_geo.xlsx")
-commute_mode_geo <- readxl::read_excel("TT_2019w45_geo.xlsx")
+commute_mode_geo <- readxl::read_excel("2019w45/TT_2019w45_geo.xlsx")
+# commute_mode_geo <- readxl::read_excel("TT_2019w45_geo.xlsx")
 ```
 
-
-```r
+```{r cleaning, eval = F}
 # cleaning code from:
 # https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-11-05
 
@@ -115,8 +123,7 @@ full_commute %>%
 
 Code for tidying summary tables by demographics was also provided as below.
 
-
-```r
+```{r t3_cleaning}
 # ACS Data ----------------------------------------------------------------
 
 # acs_data <- read_csv(here("2019", "2019-11-05", "table_3.csv"))
@@ -153,35 +160,19 @@ education_data <- acs_data %>%
 
 First, look at data using `head`:
 
-
-```r
+```{r exploring}
 head(commute_mode)
 ```
-
-<div data-pagedtable="false">
-  <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["city"],"name":[1],"type":["chr"],"align":["left"]},{"label":["state"],"name":[2],"type":["chr"],"align":["left"]},{"label":["city_size"],"name":[3],"type":["chr"],"align":["left"]},{"label":["mode"],"name":[4],"type":["chr"],"align":["left"]},{"label":["n"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["percent"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["moe"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["state_abb"],"name":[8],"type":["chr"],"align":["left"]},{"label":["state_region"],"name":[9],"type":["chr"],"align":["left"]}],"data":[{"1":"Aberdeen city","2":"South Dakota","3":"Small","4":"Bike","5":"110","6":"0.8","7":"0.5","8":"SD","9":"North Central"},{"1":"Acworth city","2":"Georgia","3":"Small","4":"Bike","5":"0","6":"0.0","7":"0.4","8":"GA","9":"South"},{"1":"Addison village","2":"Illinois","3":"Small","4":"Bike","5":"43","6":"0.2","7":"0.3","8":"IL","9":"North Central"},{"1":"Adelanto city","2":"California","3":"Small","4":"Bike","5":"0","6":"0.0","7":"0.5","8":"CA","9":"West"},{"1":"Adrian city","2":"Michigan","3":"Small","4":"Bike","5":"121","6":"1.5","7":"1.0","8":"MI","9":"North Central"},{"1":"Agawam Town city","2":"Massachusetts","3":"Small","4":"Bike","5":"0","6":"0.0","7":"0.2","8":"MA","9":"Northeast"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
 
 Still some small things to tidy:
 
 * fix those with missing state abbreviation or region
 * re-check to see the errors are all fixed
 
-
-```r
+```{r tiding}
 commute_mode %>% 
   filter(is.na(state_region))
-```
 
-<div data-pagedtable="false">
-  <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["city"],"name":[1],"type":["chr"],"align":["left"]},{"label":["state"],"name":[2],"type":["chr"],"align":["left"]},{"label":["city_size"],"name":[3],"type":["chr"],"align":["left"]},{"label":["mode"],"name":[4],"type":["chr"],"align":["left"]},{"label":["n"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["percent"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["moe"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["state_abb"],"name":[8],"type":["chr"],"align":["left"]},{"label":["state_region"],"name":[9],"type":["chr"],"align":["left"]}],"data":[{"1":"El Paso de Robles (Paso Robles) city","2":"Ca","3":"Small","4":"Bike","5":"71","6":"0.5","7":"0.4","8":"NA","9":"NA"},{"1":"West Springfield Town city","2":"Massachusett","3":"Small","4":"Bike","5":"23","6":"0.2","7":"0.2","8":"NA","9":"NA"},{"1":"Washington city","2":"District of Columbia","3":"Large","4":"Bike","5":"9347","6":"3.1","7":"0.2","8":"NA","9":"NA"},{"1":"Washington city","2":"District of Columbia","3":"Large","4":"Walk","5":"37055","6":"12.1","7":"0.5","8":"NA","9":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
-
-```r
 # DC is south, CA is West
 
 commute_mode$state_abb[which(commute_mode$city == "El Paso de Robles (Paso Robles) city")] <- "CA"
@@ -197,28 +188,13 @@ USA <- usmap::us_map()
 
 # check if state names and things are spelled correctly
 commute_mode %>% anti_join(USA, by = c("state" = "full")) 
-```
 
-<div data-pagedtable="false">
-  <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["city"],"name":[1],"type":["chr"],"align":["left"]},{"label":["state"],"name":[2],"type":["chr"],"align":["left"]},{"label":["city_size"],"name":[3],"type":["chr"],"align":["left"]},{"label":["mode"],"name":[4],"type":["chr"],"align":["left"]},{"label":["n"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["percent"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["moe"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["state_abb"],"name":[8],"type":["chr"],"align":["left"]},{"label":["state_region"],"name":[9],"type":["chr"],"align":["left"]}],"data":[{"1":"El Paso de Robles (Paso Robles) city","2":"Ca","3":"Small","4":"Bike","5":"71","6":"0.5","7":"0.4","8":"CA","9":"West"},{"1":"West Springfield Town city","2":"Massachusett","3":"Small","4":"Bike","5":"23","6":"0.2","7":"0.2","8":"MA","9":"Northeast"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
-
-```r
 commute_mode %>% anti_join(USA, by = c("state_abb" = "abbr")) 
 ```
 
-<div data-pagedtable="false">
-  <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["city"],"name":[1],"type":["chr"],"align":["left"]},{"label":["state"],"name":[2],"type":["chr"],"align":["left"]},{"label":["city_size"],"name":[3],"type":["chr"],"align":["left"]},{"label":["mode"],"name":[4],"type":["chr"],"align":["left"]},{"label":["n"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["percent"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["moe"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["state_abb"],"name":[8],"type":["chr"],"align":["left"]},{"label":["state_region"],"name":[9],"type":["chr"],"align":["left"]}],"data":[],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
-
 Next, I clean the added words "village", "town", "city", etc from the end of each city name, create a concatenation of city and state, and geocode using google maps. I saved this as a CSV to save time when re-running the file. The code is commented out, but shown for completeness.
 
-
-```r
+```{r geocoding}
 # remove last word in each city name
 commute_mode$city2 <- gsub("\\s*\\w*$", "", commute_mode$city)
 
@@ -232,8 +208,7 @@ commute_mode$city_state <- paste(commute_mode$city2, commute_mode$state_abb)
 
 I used `choroplethrMaps` to get the USA state-level data, which I joined to state averages of walk and bike travel.
 
-
-```r
+```{r datamanipulation}
 # filter to map each mode
 # color each state by avg
 commute_mode_geo_bike <- commute_mode_geo %>% 
@@ -266,8 +241,7 @@ US_map_walk <- left_join(state.map, state_walk, by = c("region" = "state")) %>%
 
 Below are box plots of mode of travel by city size and region. There are more walkers, more variation in small cities, and it looks like the northeast may have more walkers than other regions.
 
-
-```r
+```{r plots}
 ggplot(data = commute_mode,
       aes(x = city_size, y= percent, fill= state_region)) +
   geom_boxplot() + 
@@ -279,12 +253,9 @@ ggplot(data = commute_mode,
   theme(legend.position = "bottom")
 ```
 
-![](TT_2019_45_files/figure-html/plots-1.png)<!-- -->
-
 Finally, I map the data below. Each point represents a city in the dataset. The points and states are colored according to the percent of mode of travel, by city or averaged over the whole state. I also piped to plotly so the maps are interactive.
 
-
-```r
+```{r maps}
 US_bike <- US_map_bike %>% 
     ggplot(aes(long, lat, 
                group = group, fill = state_avg)) +
@@ -303,11 +274,9 @@ US_bike <- US_map_bike %>%
   theme(legend.position = "bottom") 
 
 US_bike
-```
 
-![](TT_2019_45_files/figure-html/maps-1.png)<!-- -->
+plotly::ggplotly(US_bike + theme(legend.position = "none"))
 
-```r
 walk_map <- US_map_walk %>% 
   filter(long<0) %>% 
     ggplot(aes(long, lat, 
@@ -327,9 +296,9 @@ walk_map <- US_map_walk %>%
   theme(legend.position = "bottom") 
 
 walk_map
-```
 
-![](TT_2019_45_files/figure-html/maps-2.png)<!-- -->
+plotly::ggplotly(walk_map + theme(legend.position = "none"))
+```
 
 
 <hr />

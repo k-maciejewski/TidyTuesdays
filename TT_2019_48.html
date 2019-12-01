@@ -20,8 +20,11 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 <script src="site_libs/htmlwidgets-1.3/htmlwidgets.js"></script>
@@ -267,6 +270,14 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 
 
@@ -329,6 +340,14 @@ $(document).ready(function () {
 </div><!--/.navbar -->
 
 <div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
 
 
 
@@ -410,17 +429,11 @@ $(document).ready(function () {
 </table>
 <p>Preview of the data:</p>
 <pre class="r"><code>head(loans)</code></pre>
-<pre><code>## # A tibble: 6 x 10
-##   agency_name  year quarter starting   added  total consolidation
-##   &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;         &lt;dbl&gt;
-## 1 Account Co…    15       4   5.81e9  1.04e9 1.23e8     20081894.
-## 2 Allied Int…    15       4   3.69e9 NA      1.13e8     11533809.
-## 3 CBE Group      15       4   2.36e9 NA      8.39e7      7377703.
-## 4 Coast Prof…    15       4   7.04e8 NA      9.96e7      3401361.
-## 5 Collection…    15       4   2.95e9 NA      7.57e7      8946976 
-## 6 Collecto, …    15       4   2.30e9 NA      7.88e7      6952382.
-## # … with 3 more variables: rehabilitation &lt;dbl&gt;, voluntary_payments &lt;dbl&gt;,
-## #   wage_garnishments &lt;dbl&gt;</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["agency_name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["year"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["quarter"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["starting"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["added"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["total"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["consolidation"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["rehabilitation"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["voluntary_payments"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["wage_garnishments"],"name":[10],"type":["dbl"],"align":["right"]}],"data":[{"1":"Account Control Technology, Inc.","2":"15","3":"4","4":"5807704381","5":"1040570567","6":"122602642","7":"20081894","8":"90952573","9":"5485507","10":"6082668"},{"1":"Allied Interstate, Inc.","2":"15","3":"4","4":"3693337631","5":"NA","6":"113326847","7":"11533809","8":"86967994","9":"4885225","10":"9939819"},{"1":"CBE Group","2":"15","3":"4","4":"2364391549","5":"NA","6":"83853003","7":"7377703","8":"64227391","9":"3939866","10":"8308043"},{"1":"Coast Professional, Inc.","2":"15","3":"4","4":"704216670","5":"NA","6":"99643903","7":"3401361","8":"85960328","9":"2509000","10":"7773214"},{"1":"Collection Technology Incorporated","2":"15","3":"4","4":"2952923197","5":"NA","6":"75725486","7":"8946976","8":"58395653","9":"2909013","10":"5473844"},{"1":"Collecto, INC dba EOS-CCA","2":"15","3":"4","4":"2296819928","5":"NA","6":"78776490","7":"6952382","8":"56324366","9":"3646365","10":"11853377"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 <p>I noticed some names seemed to be duplicates, such as <code>Action Financial Services</code> and <code>Action Financial Services*</code> so I combined them. I tried to find a programatic way to find and replace, but it didn’t go well, then it stopped allowing me to knit the doc. So I ended up manually editing anyway. It also seems like <code>Account Control Technology, Inc.</code> is the same as <code>ACT</code>. The red rows are those tagged as duplicates, before and after cleaning.</p>
 <pre class="r"><code># make it long
 loans_long &lt;- pivot_longer(loans, 
@@ -450,13 +463,13 @@ unique(agency_names) %&gt;%
                                                           &quot;National Recoveries Inc&quot;, &quot;National Recoveries, Inc.&quot;,
                                                           &quot;Pioneer&quot;, &quot;Pioneer Credit Recovery, Inc&quot;,
                                                           &quot;Windham&quot;, &quot;Windham Professionals, Inc.&quot;), 1, 0)) %&gt;%
-  DT::datatable() %&gt;% 
-  DT::formatStyle(columns = &quot;Raw agency names&quot;,
+  datatable() %&gt;% 
+  formatStyle(columns = &quot;Raw agency names&quot;,
         valueColumns = &quot;dupe_list&quot;,
-        color = DT::styleEqual(&quot;1&quot;, &quot;red&quot;)
+        color = styleEqual(&quot;1&quot;, &quot;red&quot;)
     )</code></pre>
-<div id="htmlwidget-aab74a9989a960552df1" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-aab74a9989a960552df1">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42"],["Account Control Technology, Inc.","ACT","Action Financial Services","Action Financial Services*","Allied Interstate, Inc.","Bass and Associates","CBE Group","Central Research","Central Research*","Coast Professional Inc","Coast Professional, Inc.","Collection Technology Incorporated","Collecto, INC dba EOS-CCA","ConServe","Credit Adjustments Inc","Credit Adjustments, Inc.","Credit Adjustments, Inc.*","Delta Management Associates, Inc.","Diversified Collection Services, Inc.","ERS","FH Cann and Associates","Financial Asset Management Systems, Inc.","FMS","FMS Investment Corp","GC Services","GC Services LP","Immediate Credit Recovery","Immediate Credit Recovery, Inc.","National Credit Services","National Recoveries Inc","National Recoveries, Inc.","NCO Financial Systems, Inc.","Pioneer","Pioneer Credit Recovery, Inc","Premiere Credit of North America, LLC","Professional Bureau of Collections of Maryland","Progressive Financial Services, Inc.","Reliant Capital Solutions","Van Ru Credit Corporation","West Asset Management, Inc.","Windham","Windham Professionals, Inc."],[1,1,1,1,0,0,0,1,1,1,1,0,0,0,1,1,1,0,0,0,0,0,1,1,1,1,1,1,0,1,1,0,1,1,0,0,0,0,0,0,1,1]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Raw agency names<\/th>\n      <th>dupe_list<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":2},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data) {\nvar value=data[2]; $(this.api().cell(row, 1).node()).css({'color':value == '1' ? 'red' : ''});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
+<div id="htmlwidget-595c9d01f36ec5616628" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-595c9d01f36ec5616628">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42"],["Account Control Technology, Inc.","ACT","Action Financial Services","Action Financial Services*","Allied Interstate, Inc.","Bass and Associates","CBE Group","Central Research","Central Research*","Coast Professional Inc","Coast Professional, Inc.","Collection Technology Incorporated","Collecto, INC dba EOS-CCA","ConServe","Credit Adjustments Inc","Credit Adjustments, Inc.","Credit Adjustments, Inc.*","Delta Management Associates, Inc.","Diversified Collection Services, Inc.","ERS","FH Cann and Associates","Financial Asset Management Systems, Inc.","FMS","FMS Investment Corp","GC Services","GC Services LP","Immediate Credit Recovery","Immediate Credit Recovery, Inc.","National Credit Services","National Recoveries Inc","National Recoveries, Inc.","NCO Financial Systems, Inc.","Pioneer","Pioneer Credit Recovery, Inc","Premiere Credit of North America, LLC","Professional Bureau of Collections of Maryland","Progressive Financial Services, Inc.","Reliant Capital Solutions","Van Ru Credit Corporation","West Asset Management, Inc.","Windham","Windham Professionals, Inc."],[1,1,1,1,0,0,0,1,1,1,1,0,0,0,1,1,1,0,0,0,0,0,1,1,1,1,1,1,0,1,1,0,1,1,0,0,0,0,0,0,1,1]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Raw agency names<\/th>\n      <th>dupe_list<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":2},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data) {\nvar value=data[2]; $(this.api().cell(row, 1).node()).css({'color':value == '1' ? 'red' : ''});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
 <pre class="r"><code># there are some repeats
 
 ##############################################
@@ -523,8 +536,8 @@ unique(agency_names_fixed) %&gt;%
         valueColumns = &quot;dupe_list&quot;,
         color = DT::styleEqual(&quot;1&quot;, &quot;red&quot;)
     )</code></pre>
-<div id="htmlwidget-fe126ef242f8955efcea" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-fe126ef242f8955efcea">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30"],["Account Control Technology, Inc.","Action Financial Services","Allied Interstate, Inc.","Bass and Associates","CBE Group","Central Research","Coast Professional, Inc.","Collection Technology Incorporated","Collecto, INC dba EOS-CCA","ConServe","Credit Adjustments, Inc.","Delta Management Associates, Inc.","Diversified Collection Services, Inc.","ERS","FH Cann and Associates","Financial Asset Management Systems, Inc.","FMS Investment Corp","GC Services LP","Immediate Credit Recovery, Inc.","National Credit Services","National Recoveries, Inc.","NCO Financial Systems, Inc.","Pioneer Credit Recovery, Inc","Premiere Credit of North America, LLC","Professional Bureau of Collections of Maryland","Progressive Financial Services, Inc.","Reliant Capital Solutions","Van Ru Credit Corporation","West Asset Management, Inc.","Windham Professionals, Inc."],[1,1,0,0,0,1,1,0,0,0,1,0,0,0,0,0,1,1,1,0,1,0,1,0,0,0,0,0,0,1]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Cleaned agency names<\/th>\n      <th>dupe_list<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":2},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data) {\nvar value=data[2]; $(this.api().cell(row, 1).node()).css({'color':value == '1' ? 'red' : ''});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
+<div id="htmlwidget-eae19a0a0f537154fd5a" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-eae19a0a0f537154fd5a">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30"],["Account Control Technology, Inc.","Action Financial Services","Allied Interstate, Inc.","Bass and Associates","CBE Group","Central Research","Coast Professional, Inc.","Collection Technology Incorporated","Collecto, INC dba EOS-CCA","ConServe","Credit Adjustments, Inc.","Delta Management Associates, Inc.","Diversified Collection Services, Inc.","ERS","FH Cann and Associates","Financial Asset Management Systems, Inc.","FMS Investment Corp","GC Services LP","Immediate Credit Recovery, Inc.","National Credit Services","National Recoveries, Inc.","NCO Financial Systems, Inc.","Pioneer Credit Recovery, Inc","Premiere Credit of North America, LLC","Professional Bureau of Collections of Maryland","Progressive Financial Services, Inc.","Reliant Capital Solutions","Van Ru Credit Corporation","West Asset Management, Inc.","Windham Professionals, Inc."],[1,1,0,0,0,1,1,0,0,0,1,0,0,0,0,0,1,1,1,0,1,0,1,0,0,0,0,0,0,1]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Cleaned agency names<\/th>\n      <th>dupe_list<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":2},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data) {\nvar value=data[2]; $(this.api().cell(row, 1).node()).css({'color':value == '1' ? 'red' : ''});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
 <p>I’m not really sure what the terms mean, so I just made some exploratory plots.</p>
 <p>Rehabilitation was the greatest amount of the recoveries, about 75% of the total each year. Voluntary payments were pretty low, but got a slight bump in 2018.</p>
 <p>Among inventory, starting amount was the greatest, which makes sense. There was a period in 2017 where no inventory was added. It looks like this corresponds to a slight increase in wage garnishments and decrease in consolidation. There’s a very large bump in inventory added in 2018, which looks like it corresponds to increase in rehabilitation and voluntary payments.</p>

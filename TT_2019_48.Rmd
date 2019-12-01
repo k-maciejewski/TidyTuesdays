@@ -1,7 +1,7 @@
 ---
 title: "Tidy Tuesday 2019 week 48"
 output:
-    rmarkdown::html_document:
+  html_document:
       theme: cosmo
       df_print: paged
       code_folding: hide
@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
 library(tidyverse)
 library(gganimate)
 library(ggpubr)
+library(DT)
 htmltools::tagList(rmarkdown::html_dependency_font_awesome())
 ```
 
@@ -78,10 +79,10 @@ unique(agency_names) %>%
                                                           "National Recoveries Inc", "National Recoveries, Inc.",
                                                           "Pioneer", "Pioneer Credit Recovery, Inc",
                                                           "Windham", "Windham Professionals, Inc."), 1, 0)) %>%
-  DT::datatable() %>% 
-  DT::formatStyle(columns = "Raw agency names",
+  datatable() %>% 
+  formatStyle(columns = "Raw agency names",
         valueColumns = "dupe_list",
-        color = DT::styleEqual("1", "red")
+        color = styleEqual("1", "red")
     )
 
 # there are some repeats
@@ -247,7 +248,7 @@ Below are spagetti plots by each agency, animated using `gganimate`
 
 There seems to be a lot of NA's in the plots. It looks like some data is missing entirely for some years, or there are gaps in some agencies' data. Not sure why, and it would probably take some digging in to the companies and other data sources to try to figure it out. It looks like some of the agencies that go missing were trending down prior to that - so maybe they closed or went out of business.
 
-```{r plots_2, fig.height = 10}
+```{r plots_2}
 spag_plot <- loans_long %>% 
   filter(!type %in% c("total")) %>% 
   ggplot(., aes(yrqtr, amount, color = type, group = agency_name)) + 

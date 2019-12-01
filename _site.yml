@@ -11,6 +11,8 @@ navbar:
           href: TT_2019_44.html
         - text: "2019 week 45"
           href: TT_2019_45.html
+        - text: "2019 week 48"
+          href: TT_2019_48.html
     - icon: fa-github fa-lg
       href: https://github.com/k-maciejewski/TidyTuesdays/
 output:

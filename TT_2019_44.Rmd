@@ -1,0 +1,122 @@
+---
+title: "Tidy Tuesday 2019 week 44"
+output:
+    rmarkdown::html_document:
+      theme: cosmo
+      df_print: paged
+      keep_md: true
+      code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+library(tidyverse)
+library(leaflet)
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+```
+
+
+```{r dataload}
+nyc_squirrels <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-10-29/nyc_squirrels.csv")
+```
+
+This [Tidy Tuesday](https://github.com/rfordatascience/tidytuesday/blob/master/data/2019/2019-10-29) explores the [squirrel census!](https://www.thesquirrelcensus.com) I took the opportunity to try to learn a little [Leaflet.](https://leafletjs.com)
+
+```{r}
+# date string to date time
+nyc_squirrels$date_2 <- lubridate::mdy(nyc_squirrels$date)
+
+# above ground FALSE to 0 and character to numeric
+nyc_squirrels$above_ground_sighter_measurement <- ifelse(nyc_squirrels$above_ground_sighter_measurement == "FALSE", 0, nyc_squirrels$above_ground_sighter_measurement) %>% 
+  as.numeric() 
+
+# max(nyc_squirrels$above_ground_sighter_measurement, na.rm= T)
+# summary(nyc_squirrels$above_ground_sighter_measurement)
+nyc_squirrels <- nyc_squirrels %>% 
+  filter(!is.na(above_ground_sighter_measurement))
+
+# hex map
+hex_map<- ggplot(nyc_squirrels, 
+                 aes(x = lat, y = long, 
+                     color = above_ground_sighter_measurement)) +
+  geom_hex()
+
+# set leaflet map
+
+# all heights
+pal <- colorBin(palette = "RdYlBu", 
+                    domain = nyc_squirrels$above_ground_sighter_measurement, 
+                    bins = 10,
+                    reverse = TRUE)
+
+nyc_squirrels_map <- leaflet(nyc_squirrels) %>% 
+  addProviderTiles(providers$CartoDB) %>% 
+  addCircleMarkers(radius = 2, 
+                   color = ~pal(above_ground_sighter_measurement)) %>%
+  addLegend("bottomright", 
+            pal = pal, 
+            values = ~above_ground_sighter_measurement, 
+            title = "Squirrel height above ground") %>% 
+  addScaleBar("bottomleft")
+
+# less than 50 and not ground
+nyc_squirrels_l50 <- nyc_squirrels %>% 
+  filter(above_ground_sighter_measurement > 0) %>%
+  filter(above_ground_sighter_measurement < 50)
+
+pal <- colorBin(palette = "RdYlBu", 
+                    domain = nyc_squirrels_l50$above_ground_sighter_measurement, 
+                    bins = 10,
+                    reverse = TRUE)
+
+nyc_squirrels_l50_map <- leaflet(nyc_squirrels_l50) %>% 
+  addProviderTiles(providers$CartoDB) %>% 
+  addCircleMarkers(radius = 2, 
+                   color = ~pal(above_ground_sighter_measurement)) %>%
+  addLegend("bottomright", 
+            pal = pal, 
+            values = ~above_ground_sighter_measurement, 
+            title = "Squirrel height above ground") %>% 
+  addScaleBar("bottomleft")
+
+
+# above 50
+nyc_squirrels_g50 <- nyc_squirrels %>% 
+  filter(above_ground_sighter_measurement > 50)
+
+pal <- colorBin(palette = "RdYlBu", 
+                    domain = nyc_squirrels_g50$above_ground_sighter_measurement, 
+                    bins = 10,
+                    reverse = TRUE)
+
+nyc_squirrels_g50_map <- leaflet(nyc_squirrels_g50) %>% 
+  addProviderTiles(providers$CartoDB) %>% 
+  addCircleMarkers(radius = 2, 
+                   color = ~pal(above_ground_sighter_measurement)) %>%
+  addLegend("bottomright", 
+            pal = pal, 
+            values = ~above_ground_sighter_measurement, 
+            title = "Squirrel height above ground") %>% 
+  addScaleBar("bottomleft")
+```
+
+The first map shows all squirrels with given distance above ground at which they were sighted. NA's were filtered out. According to [the data dictionary](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-10-29#data-dictionary), fields were populated with a value of “FALSE” if the squirrel was on the ground plane so these values were changed to zeros. This map is mostly filled with dark blue, the color of ground-dwelling squirrels.
+
+`r nyc_squirrels_map`
+
+Next, ground plane was filtered out and only values below 50 are shown. This map is a little more manageable.
+
+`r nyc_squirrels_l50_map`
+
+
+The final map shows values above 50. There are only a handful of such points.
+
+`r nyc_squirrels_g50_map`
+
+I couldn't find any information about the units for the measurement, so I'm not sure if the upper range makes any sense...
+
+<hr />
+<P ALIGN=CENTER> [<i class="fa fa-github" font color="#4F8AC2" style="font-size: 20pt"></i>](https://github.com/k-maciejewski/TidyTuesdays) 
+[<i class="fa fa-globe" font color="#4F8AC2" style="font-size: 20pt"></i>](https://k-maciejewski.github.io) </P>
+
+<hr />
